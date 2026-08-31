@@ -2,6 +2,12 @@ name: Notify Repo Events
 
 on:
   workflow_call:
+    inputs:
+      runner:
+        description: GitHub Actions runner label (e.g. ubuntu-latest or self-hosted)
+        type: string
+        required: false
+        default: ubuntu-latest
     secrets:
       TELEGRAM_TO:
         required: true
@@ -11,7 +17,7 @@ on:
 jobs:
   notify:
     name: telegram notify
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     timeout-minutes: 5
     steps:
       - name: Notify push
