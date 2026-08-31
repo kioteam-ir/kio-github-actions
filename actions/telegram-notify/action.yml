@@ -24,6 +24,10 @@ inputs:
     description: Send silently
     required: false
     default: "false"
+  message_thread_id:
+    description: Forum topic thread id (kioteam notify topic)
+    required: false
+    default: "8643"
 
 runs:
   using: composite
@@ -37,3 +41,4 @@ runs:
         format: ${{ inputs.format }}
         disable_web_page_preview: ${{ inputs.disable_web_page_preview }}
         disable_notification: ${{ inputs.disable_notification }}
+        message_thread_id: ${{ inputs.message_thread_id }}
