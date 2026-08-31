@@ -20,6 +20,8 @@ A reusable workflow that lives in this repo must reference composite actions wit
 
 This repo is public so public callers such as `kio-website` can use it. Do not put secrets in YAML.
 
+This repo also calls `notify-events.yml@v1` from `.github/workflows/notify.yml` so its own pushes, issues, PRs, and releases notify Telegram. Set `TELEGRAM_TO` and `TELEGRAM_TOKEN` as repository secrets (same names as the product repos).
+
 ## Reusable workflow: notify events
 
 Caller keeps the `on:` triggers. This repo owns the Telegram job.
