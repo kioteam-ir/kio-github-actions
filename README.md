@@ -16,7 +16,7 @@ A reusable workflow that lives in this repo must reference composite actions wit
 ## Setup (once per org)
 
 1. Repo → Settings → Actions → General → Access: **Accessible from repositories in the `kioteam-ir` organization**.
-2. Put `TELEGRAM_TO` and `TELEGRAM_TOKEN` on the caller repo, or as org secrets.
+2. Put `TELEGRAM_TO` (supergroup chat id) and `TELEGRAM_TOKEN` on the caller repo, or as org secrets. `telegram-notify` sends to forum topic `8643` unless `message_thread_id` is overridden.
 
 This repo is public so public callers such as `kio-website` can use it. Do not put secrets in YAML.
 
