@@ -50,6 +50,26 @@ jobs:
 
 Optional input `runner` defaults to `ubuntu-latest`. Self-hosted callers pass `with: { runner: self-hosted }`.
 
+## Reusable workflow: notify CI result
+
+Caller keeps `on.workflow_run` (which workflows to watch). This repo owns success/failure Telegram jobs.
+
+```yaml
+name: Notify CI Result
+
+on:
+  workflow_run:
+    workflows: [CI, Deploy]
+    types: [completed]
+
+jobs:
+  notify:
+    uses: kioteam-ir/kio-github-actions/.github/workflows/notify-ci.yml@v1
+    secrets:
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+```
+
 ## Composite action: telegram-notify
 
 ```yaml
