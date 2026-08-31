@@ -1,0 +1,52 @@
+name: Notify CI Result
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: GitHub Actions runner label (e.g. ubuntu-latest or self-hosted)
+        type: string
+        required: false
+        default: ubuntu-latest
+    secrets:
+      TELEGRAM_TO:
+        required: true
+      TELEGRAM_TOKEN:
+        required: true
+
+jobs:
+  success:
+    name: notify success
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 5
+    steps:
+      - uses: kioteam-ir/kio-github-actions/actions/telegram-notify@v1
+        with:
+          format: markdown
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_notification: true
+          message: |
+            ✅ **${{ github.event.workflow_run.name }} passed**
+            Repo: `${{ github.repository }}`
+            Branch: `${{ github.event.workflow_run.head_branch }}`
+            ${{ github.event.workflow_run.html_url }}
+
+  failure:
+    name: notify failure
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 5
+    steps:
+      - uses: kioteam-ir/kio-github-actions/actions/telegram-notify@v1
+        with:
+          format: markdown
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ❌ **${{ github.event.workflow_run.name }} FAILED**
+            Repo: `${{ github.repository }}`
+            Branch: `${{ github.event.workflow_run.head_branch }}`
+            By: `${{ github.event.workflow_run.actor.login }}`
+            ${{ github.event.workflow_run.html_url }}
