@@ -1,0 +1,39 @@
+name: Telegram Notify
+description: Send a Telegram message with kioteam-ir defaults
+author: kioteam-ir
+
+inputs:
+  token:
+    description: Telegram bot token
+    required: true
+  to:
+    description: Telegram chat id or username
+    required: true
+  message:
+    description: Message body
+    required: true
+  format:
+    description: Message parse mode
+    required: false
+    default: markdown
+  disable_web_page_preview:
+    description: Disable link previews
+    required: false
+    default: "true"
+  disable_notification:
+    description: Send silently
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Send Telegram message
+      uses: appleboy/telegram-action@214f06cfa3d3a588c1472116889437e7c6fd29b1 # v1.1.1
+      with:
+        token: ${{ inputs.token }}
+        to: ${{ inputs.to }}
+        message: ${{ inputs.message }}
+        format: ${{ inputs.format }}
+        disable_web_page_preview: ${{ inputs.disable_web_page_preview }}
+        disable_notification: ${{ inputs.disable_notification }}
