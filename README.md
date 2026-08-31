@@ -48,6 +48,8 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 ```
 
+Optional input `runner` defaults to `ubuntu-latest`. Self-hosted callers pass `with: { runner: self-hosted }`.
+
 ## Composite action: telegram-notify
 
 ```yaml
