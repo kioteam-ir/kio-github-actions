@@ -22,7 +22,7 @@ on:
         description: Optional command run after installation and before tests
         required: false
         type: string
-        default: true
+        default: "true"
 
 permissions:
   contents: read
