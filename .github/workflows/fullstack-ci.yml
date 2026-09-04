@@ -1,0 +1,96 @@
+name: Full-stack CI
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: Python version used by the backend
+        required: false
+        type: string
+        default: "3.12"
+      backend-directory:
+        description: Backend project directory
+        required: false
+        type: string
+        default: backend
+      frontend-directory:
+        description: Frontend project directory
+        required: false
+        type: string
+        default: frontend
+      backend-install-command:
+        description: Backend dependency installation command
+        required: false
+        type: string
+        default: python -m pip install -r requirements.txt
+      backend-lint-command:
+        description: Backend lint command
+        required: false
+        type: string
+        default: if [ -x scripts/lint.sh ]; then ./scripts/lint.sh; else python -m compileall -q .; fi
+      backend-test-command:
+        description: Backend test command
+        required: false
+        type: string
+        default: if [ -x scripts/test.sh ]; then ./scripts/test.sh; elif [ -d tests ]; then python -m pytest -q; else echo "No backend tests configured"; fi
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend lint and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ${{ inputs.backend-directory }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+          cache-dependency-path: ${{ inputs.backend-directory }}/requirements.txt
+
+      - name: Install dependencies
+        run: ${{ inputs.backend-install-command }}
+
+      - name: Run backend lint
+        run: ${{ inputs.backend-lint-command }}
+
+      - name: Run backend tests
+        run: ${{ inputs.backend-test-command }}
+
+  frontend:
+    name: Frontend lint, test, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ${{ inputs.frontend-directory }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ inputs.frontend-directory }}/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run frontend lint
+        run: npm run lint
+
+      - name: Run frontend tests
+        run: npm run test --if-present
+
+      - name: Build frontend
+        run: npm run build
