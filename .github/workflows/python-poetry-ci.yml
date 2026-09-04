@@ -27,6 +27,9 @@ on:
 permissions:
   contents: read
 
+env:
+  POETRY_KEYRING_ENABLED: "false"
+
 jobs:
   lint:
     name: Lint
