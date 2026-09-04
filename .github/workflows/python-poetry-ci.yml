@@ -18,6 +18,11 @@ on:
         required: false
         type: string
         default: poetry run pytest -q
+      pre-test-command:
+        description: Optional command run after installation and before tests
+        required: false
+        type: string
+        default: true
 
 permissions:
   contents: read
@@ -53,6 +58,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      TOKEN: ci-test-token
+      SESSION_BACKEND: memory
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -71,6 +79,9 @@ jobs:
 
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi --with dev
+
+      - name: Prepare test environment
+        run: ${{ inputs.pre-test-command }}
 
       - name: Run tests
         run: ${{ inputs.test-command }}
