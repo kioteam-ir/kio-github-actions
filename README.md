@@ -86,6 +86,36 @@ jobs:
           message: hello from ${{ github.repository }}
 ```
 
+## Reusable CI workflows
+
+Use GitHub-hosted runners through reusable workflows:
+
+### Python Poetry
+
+```yaml
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    uses: kioteam-ir/kio-github-actions/.github/workflows/python-poetry-ci.yml@v1
+```
+
+### Full-stack
+
+```yaml
+jobs:
+  fullstack:
+    uses: kioteam-ir/kio-github-actions/.github/workflows/fullstack-ci.yml@v1
+```
+
+The full-stack workflow expects `backend/requirements.txt` and
+`frontend/package-lock.json`. Override the workflow inputs when a project
+uses different directories or commands.
+
 ## Release
 
 1. Merge to `main`.
