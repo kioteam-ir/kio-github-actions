@@ -31,7 +31,7 @@ jobs:
             ✅ **${{ github.event.workflow_run.name }} passed**
             Repo: `${{ github.repository }}`
             Branch: `${{ github.event.workflow_run.head_branch }}`
-            ${{ github.event.workflow_run.html_url }}
+            `${{ github.event.workflow_run.html_url }}`
 
   failure:
     name: notify failure
@@ -49,4 +49,4 @@ jobs:
             Repo: `${{ github.repository }}`
             Branch: `${{ github.event.workflow_run.head_branch }}`
             By: `${{ github.event.workflow_run.actor.login }}`
-            ${{ github.event.workflow_run.html_url }}
+            `${{ github.event.workflow_run.html_url }}`
