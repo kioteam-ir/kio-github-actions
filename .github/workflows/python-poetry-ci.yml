@@ -1,0 +1,88 @@
+name: Python Poetry CI
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: Python version used by the project
+        required: false
+        type: string
+        default: "3.13"
+      lint-command:
+        description: Command used for linting
+        required: false
+        type: string
+        default: poetry run ruff check .
+      test-command:
+        description: Command used for tests
+        required: false
+        type: string
+        default: poetry run pytest -q
+      pre-test-command:
+        description: Optional command run after installation and before tests
+        required: false
+        type: string
+        default: "true"
+
+permissions:
+  contents: read
+
+env:
+  POETRY_KEYRING_ENABLED: "false"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-ansi --with dev
+
+      - name: Run lint
+        run: ${{ inputs.lint-command }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TOKEN: ci-test-token
+      SESSION_BACKEND: memory
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-ansi --with dev
+
+      - name: Prepare test environment
+        run: ${{ inputs.pre-test-command }}
+
+      - name: Run tests
+        run: ${{ inputs.test-command }}
