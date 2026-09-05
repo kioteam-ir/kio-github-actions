@@ -34,7 +34,7 @@ jobs:
             By: `${{ github.actor }}`
             Ref: `${{ github.ref_name }}`
             Message: `${{ github.event.head_commit.message }}`
-            ${{ github.event.head_commit.url }}
+            `${{ github.event.head_commit.url }}`
 
       - name: Notify issue
         if: github.event_name == 'issues'
@@ -49,7 +49,7 @@ jobs:
             Title: `${{ github.event.issue.title }}`
             By: `${{ github.actor }}`
             Repo: `${{ github.repository }}`
-            ${{ github.event.issue.html_url }}
+            `${{ github.event.issue.html_url }}`
 
       - name: Notify issue comment
         if: github.event_name == 'issue_comment'
@@ -64,7 +64,7 @@ jobs:
             💬 **Comment on Issue #${{ github.event.issue.number }}**
             By: `${{ github.actor }}`
             Repo: `${{ github.repository }}`
-            ${{ github.event.comment.html_url }}
+            `${{ github.event.comment.html_url }}`
 
       - name: Notify pull request
         if: github.event_name == 'pull_request'
@@ -79,7 +79,7 @@ jobs:
             Title: `${{ github.event.pull_request.title }}`
             By: `${{ github.actor }}`
             Repo: `${{ github.repository }}`
-            ${{ github.event.pull_request.html_url }}
+            `${{ github.event.pull_request.html_url }}`
 
       - name: Notify PR review comment
         if: github.event_name == 'pull_request_review_comment'
@@ -94,7 +94,7 @@ jobs:
             💬 **Review comment on PR #${{ github.event.pull_request.number }}**
             By: `${{ github.actor }}`
             Repo: `${{ github.repository }}`
-            ${{ github.event.comment.html_url }}
+            `${{ github.event.comment.html_url }}`
 
       - name: Notify release
         if: github.event_name == 'release'
@@ -108,4 +108,4 @@ jobs:
             🚀 **Release ${{ github.event.release.tag_name }} published**
             Repo: `${{ github.repository }}`
             By: `${{ github.actor }}`
-            ${{ github.event.release.html_url }}
+            `${{ github.event.release.html_url }}`
